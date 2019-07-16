@@ -99,8 +99,12 @@ data "aws_ami" "ubuntu-xenial" {
 |------|-------------|:----:|:-----:|:-----:|
 | ami | ID of AMI to use for the instance | string | n/a | yes |
 | associate\_public\_ip\_address | If true, the EC2 instance will have associated public IP address | string | `"false"` | no |
+| autorecovery\_enabled | Whether or not EC2 autorecovery is enabled for this/every instance | string | `"true"` | no |
 | cpu\_credits | The credit option for CPU usage (unlimited or standard) | string | `"standard"` | no |
 | disable\_api\_termination | If true, enables EC2 Instance Termination Protection | string | `"false"` | no |
+| dns\_suffix | An optional DNS suffix for this/every instance - must work in the zone and be present if using DNS registration | string | `""` | no |
+| dns\_ttl | The TTL of the DNS record created | string | `"60"` | no |
+| dns\_zone\_id | An optional Route 53 zone ID to register the instance(s) in. If blank, this feature is disabled. | string | `""` | no |
 | ebs\_block\_device | Additional EBS block devices to attach to the instance | list | `<list>` | no |
 | ebs\_optimized | If true, the launched EC2 instance will be EBS-optimized | string | `"false"` | no |
 | ephemeral\_block\_device | Customize Ephemeral (also known as Instance Store) volumes on the instance | list | `<list>` | no |
