@@ -1,3 +1,23 @@
+variable "autorecovery_enabled" {
+  description = "Whether or not EC2 autorecovery is enabled for this/every instance"
+  default     = "true"
+}
+
+variable "dns_suffix" {
+  description = "An optional DNS suffix for this/every instance - must work in the zone and be present if using DNS registration"
+  default     = ""
+}
+
+variable "dns_ttl" {
+  description = "The TTL of the DNS record created"
+  default     = 60
+}
+
+variable "dns_zone_id" {
+  description = "An optional Route 53 zone ID to register the instance(s) in. If blank, this feature is disabled."
+  default     = ""
+}
+
 variable "name" {
   description = "Name to be used on all resources as prefix"
 }
