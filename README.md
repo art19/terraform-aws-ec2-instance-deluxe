@@ -1,16 +1,16 @@
-# AWS EC2 Instance Terraform module
+# *Deluxe* AWS EC2 Instance Terraform module
 
-Terraform module which creates EC2 instance(s) on AWS.
+Terraform module which creates EC2 instance(s) on AWS. Instances may optionally have autorecovery turned on (the default) and/or register in a Route 53 zone.
 
 These types of resources are supported:
 
 * [EC2 instance](https://www.terraform.io/docs/providers/aws/r/instance.html)
+* [CloudWatch Alarm](https://www.terraform.io/docs/providers/aws/r/cloudwatch_metric_alarm.html)
+* [Route 53 Record](https://www.terraform.io/docs/providers/aws/r/route53_record.html)
 
 ## Terraform versions
 
-Terraform 0.12. Pin module version to `~> v2.0`. Submit pull-requests to `master` branch.
-
-Terraform 0.11. Pin module version to `~> v1.0`. Submit pull-requests to `terraform011` branch.
+Terraform 0.11
 
 ## Usage
 
