@@ -1,7 +1,3 @@
-locals {
-  is_t_instance_type = "${replace(var.instance_type, "/^t[23]{1}\\..*$/", "1") == "1" ? "1" : "0"}"
-}
-
 ######
 # Note: network_interface can't be specified together with associate_public_ip_address
 ######
