@@ -36,6 +36,17 @@ variable "placement_group" {
   default     = ""
 }
 
+variable "placement_partition_number" {
+  description = "If using a partition placement group, the placement partition number"
+  default     = ""
+}
+
+variable "placement_partition_numbers" {
+  description = "If using a partition placement group, the placement partition numbers (if more than one instance)"
+  type        = "list"
+  default     = []
+}
+
 variable "tenancy" {
   description = "The tenancy of the instance (if the instance is running in a VPC). Available values: default, dedicated, host."
   default     = "default"
