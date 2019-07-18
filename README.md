@@ -91,6 +91,7 @@ data "aws_ami" "ubuntu-xenial" {
   not configurable using this module at the moment
 * Changes in `ebs_block_device` argument will be ignored. Use [aws_volume_attachment](https://www.terraform.io/docs/providers/aws/r/volume_attachment.html) resource to attach and detach volumes from AWS EC2 instances. See [this example](https://github.com/terraform-aws-modules/terraform-aws-ec2-instance/tree/master/examples/volume-attachment).
 * One of `subnet_id` or `subnet_ids` is required. If both are provided, the value of `subnet_id` is prepended to the value of `subnet_ids`.
+* `placement_partition_number` support is required; this needs a version of Terraform with [this Pull Request](https://github.com/terraform-providers/terraform-provider-aws/pull/7777) merged.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
