@@ -120,6 +120,8 @@ data "aws_ami" "ubuntu-xenial" {
 | name | Name to be used on all resources as prefix | string | n/a | yes |
 | network\_interface | Customize network interfaces to be attached at instance boot time | list | `<list>` | no |
 | placement\_group | The Placement Group to start the instance in | string | `""` | no |
+| placement\_partition\_number | If using a partition placement group, the placement partition number | string | `""` | no |
+| placement\_partition\_numbers | If using a partition placement group, the placement partition numbers (if more than one instance) | list | `<list>` | no |
 | private\_ip | Private IP address to associate with the instance in a VPC | string | `""` | no |
 | root\_block\_device | Customize details about the root block device of the instance. See Block Devices below for details | list | `<list>` | no |
 | source\_dest\_check | Controls if traffic is routed to the instance when the destination address does not match the instance. Used for NAT or VPNs. | string | `"true"` | no |
