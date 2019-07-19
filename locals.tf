@@ -5,4 +5,7 @@ locals {
 
   # Get the list of partition numbers
   partition_numbers = "${distinct(compact(concat(list(var.placement_partition_number), var.placement_partition_numbers)))}"
+
+  # The list of subnet IDs
+  subnet_ids = ["${distinct(compact(concat(list(var.subnet_id), var.subnet_ids)))}"]
 }
