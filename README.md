@@ -123,6 +123,7 @@ data "aws_ami" "ubuntu-xenial" {
 | placement\_partition\_number | If using a partition placement group, the placement partition number | string | `""` | no |
 | placement\_partition\_numbers | If using a partition placement group, the placement partition numbers (if more than one instance) | list | `<list>` | no |
 | private\_ip | Private IP address to associate with the instance in a VPC | string | `""` | no |
+| private\_ips | Private IP addresses to associate with a group of instances in a VPC | list | `<list>` | no |
 | root\_block\_device | Customize details about the root block device of the instance. See Block Devices below for details | list | `<list>` | no |
 | source\_dest\_check | Controls if traffic is routed to the instance when the destination address does not match the instance. Used for NAT or VPNs. | string | `"true"` | no |
 | subnet\_id | The VPC Subnet ID to launch in | string | `""` | no |
@@ -131,6 +132,7 @@ data "aws_ami" "ubuntu-xenial" {
 | tenancy | The tenancy of the instance (if the instance is running in a VPC). Available values: default, dedicated, host. | string | `"default"` | no |
 | use\_num\_suffix | Always append numerical suffix to instance name, even if instance_count is 1 | string | `"false"` | no |
 | user\_data | The user data to provide when launching the instance | string | `""` | no |
+| user\_datas | The user data to provide when launching the instance, with support for multiple instances | string | `""` | no |
 | volume\_tags | A mapping of tags to assign to the devices created by the instance at launch time | map | `<map>` | no |
 | vpc\_security\_group\_ids | A list of security group IDs to associate with | list | n/a | yes |
 
