@@ -107,6 +107,12 @@ variable "private_ip" {
   default     = ""
 }
 
+variable "private_ips" {
+  description = "Private IP addresses to associate with a group of instances in a VPC"
+  default     = []
+  type        = "list"
+}
+
 variable "source_dest_check" {
   description = "Controls if traffic is routed to the instance when the destination address does not match the instance. Used for NAT or VPNs."
   default     = true
