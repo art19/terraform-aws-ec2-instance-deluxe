@@ -30,8 +30,8 @@ resource "aws_instance" "this" {
   placement_partition_number           = "${length(local.partition_numbers) == 0 ? "" : element(local.partition_numbers, count.index)}"
   tenancy                              = "${var.tenancy}"
 
-  tags        = "${merge(map("Name", local.name), var.tags)}"
-  volume_tags = "${merge(map("Name", local.name), var.volume_tags)}"
+  tags        = "${merge(map("Name", (var.instance_count > 1) || (var.use_num_suffix == "true") ? format("node%04d%s", count.index+1, local.dns_suffix) : format("%s%s", var.name, local.dns_suffix)), var.tags)}"
+  volume_tags = "${merge(map("Name", (var.instance_count > 1) || (var.use_num_suffix == "true") ? format("node%04d%s", count.index+1, local.dns_suffix) : format("%s%s", var.name, local.dns_suffix)), var.volume_tags)}"
 
   lifecycle {
     # Due to several known issues in Terraform AWS provider related to arguments of aws_instance:
@@ -74,8 +74,8 @@ resource "aws_instance" "this_t2" {
     cpu_credits = "${var.cpu_credits}"
   }
 
-  tags        = "${merge(map("Name", local.name), var.tags)}"
-  volume_tags = "${merge(map("Name", local.name), var.volume_tags)}"
+  tags        = "${merge(map("Name", (var.instance_count > 1) || (var.use_num_suffix == "true") ? format("node%04d%s", count.index+1, local.dns_suffix) : format("%s%s", var.name, local.dns_suffix)), var.tags)}"
+  volume_tags = "${merge(map("Name", (var.instance_count > 1) || (var.use_num_suffix == "true") ? format("node%04d%s", count.index+1, local.dns_suffix) : format("%s%s", var.name, local.dns_suffix)), var.volume_tags)}"
 
   lifecycle {
     # Due to several known issues in Terraform AWS provider related to arguments of aws_instance:
