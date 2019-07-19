@@ -2,7 +2,7 @@
 resource "aws_cloudwatch_metric_alarm" "this_instance_failed" {
   count = "${var.autorecovery_enabled == "true" ? var.instance_count * (1 - local.is_t_instance_type) : 0}"
 
-  alarm_name          = "${local.alarm_prefix}-instance-status-check"
+  alarm_name          = "${(var.instance_count > 1) || (var.use_num_suffix == "true") ? format("%s-node%04d", var.name, count.index+1) : var.name}-instance-status-check"
   alarm_description   = "Trigger an instance reboot if an instance status check fails for 3 consecutive minutes. Managed by Terraform, do not edit in the console!"
   alarm_actions       = ["arn:${data.aws_partition.current.partition}:swf:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:action/actions/AWS_EC2.InstanceId.Reboot/1.0"]
   comparison_operator = "GreaterThanThreshold"
@@ -23,7 +23,7 @@ resource "aws_cloudwatch_metric_alarm" "this_instance_failed" {
 resource "aws_cloudwatch_metric_alarm" "this_system_failed" {
   count = "${var.autorecovery_enabled == "true" ? var.instance_count * (1 - local.is_t_instance_type) : 0}"
 
-  alarm_name          = "${local.alarm_prefix}-system-status-check"
+  alarm_name          = "${(var.instance_count > 1) || (var.use_num_suffix == "true") ? format("%s-node%04d", var.name, count.index+1) : var.name}-system-status-check"
   alarm_description   = "Trigger an instance recovery if a system status check fails for 2 consecutive minutes. Managed by Terraform, do not edit in the console!"
   alarm_actions       = ["arn:${data.aws_partition.current.partition}:automate:${data.aws_region.current.name}:ec2:recover"]
   comparison_operator = "GreaterThanThreshold"
@@ -44,7 +44,7 @@ resource "aws_cloudwatch_metric_alarm" "this_system_failed" {
 resource "aws_cloudwatch_metric_alarm" "this_t2_instance_failed" {
   count = "${var.autorecovery_enabled == "true" ? var.instance_count * local.is_t_instance_type : 0}"
 
-  alarm_name          = "${local.alarm_prefix}-instance-status-check"
+  alarm_name          = "${(var.instance_count > 1) || (var.use_num_suffix == "true") ? format("%s-node%04d", var.name, count.index+1) : var.name}-instance-status-check"
   alarm_description   = "Trigger an instance reboot if an instance status check fails for 3 consecutive minutes. Managed by Terraform, do not edit in the console!"
   alarm_actions       = ["arn:${data.aws_partition.current.partition}:swf:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:action/actions/AWS_EC2.InstanceId.Reboot/1.0"]
   comparison_operator = "GreaterThanThreshold"
@@ -65,7 +65,7 @@ resource "aws_cloudwatch_metric_alarm" "this_t2_instance_failed" {
 resource "aws_cloudwatch_metric_alarm" "this_t2_system_failed" {
   count = "${var.autorecovery_enabled == "true" ? var.instance_count * local.is_t_instance_type : 0}"
 
-  alarm_name          = "${local.alarm_prefix}-system-status-check"
+  alarm_name          = "${(var.instance_count > 1) || (var.use_num_suffix == "true") ? format("%s-node%04d", var.name, count.index+1) : var.name}-system-status-check"
   alarm_description   = "Trigger an instance recovery if a system status check fails for 2 consecutive minutes. Managed by Terraform, do not edit in the console!"
   alarm_actions       = ["arn:${data.aws_partition.current.partition}:automate:${data.aws_region.current.name}:ec2:recover"]
   comparison_operator = "GreaterThanThreshold"
