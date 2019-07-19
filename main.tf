@@ -27,7 +27,7 @@ resource "aws_instance" "this" {
   disable_api_termination              = "${var.disable_api_termination}"
   instance_initiated_shutdown_behavior = "${var.instance_initiated_shutdown_behavior}"
   placement_group                      = "${var.placement_group}"
-  placement_partition_number           = "${local.partition_number_current}"
+  placement_partition_number           = "${length(local.partition_numbers) == 0 ? "" : element(local.partition_numbers, count.index)}"
   tenancy                              = "${var.tenancy}"
 
   tags        = "${merge(map("Name", local.name), var.tags)}"
@@ -67,7 +67,7 @@ resource "aws_instance" "this_t2" {
   disable_api_termination              = "${var.disable_api_termination}"
   instance_initiated_shutdown_behavior = "${var.instance_initiated_shutdown_behavior}"
   placement_group                      = "${var.placement_group}"
-  placement_partition_number           = "${local.partition_number_current}"
+  placement_partition_number           = "${length(local.partition_numbers) == 0 ? "" : element(local.partition_numbers, count.index)}"
   tenancy                              = "${var.tenancy}"
 
   credit_specification {

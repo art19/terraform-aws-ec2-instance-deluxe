@@ -8,7 +8,4 @@ locals {
 
   # Get the list of partition numbers
   partition_numbers = "${distinct(compact(concat(list(var.placement_partition_number), var.placement_partition_numbers)))}"
-
-  # Return the current partition number or empty if there are none
-  partition_number_current = "${length(local.partition_numbers) == 0 ? "" : element(local.partition_numbers, count.index)}"
 }
