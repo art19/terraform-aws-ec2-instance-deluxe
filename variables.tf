@@ -117,6 +117,11 @@ variable "user_data" {
   default     = ""
 }
 
+variable "user_datas" {
+  description = "The user data to provide when launching the instance, with support for multiple instances"
+  default     = ""
+}
+
 variable "iam_instance_profile" {
   description = "The IAM Instance Profile to launch the instance with. Specified as the name of the Instance Profile."
   default     = ""

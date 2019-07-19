@@ -6,7 +6,7 @@ resource "aws_instance" "this" {
 
   ami                    = "${var.ami}"
   instance_type          = "${var.instance_type}"
-  user_data              = "${var.user_data}"
+  user_data              = "${element(distinct(compact(concat(list(var.user_data), var.user_datas))),count.index)}"
   subnet_id              = "${element(distinct(compact(concat(list(var.subnet_id), var.subnet_ids))),count.index)}"
   key_name               = "${var.key_name}"
   monitoring             = "${var.monitoring}"
@@ -46,7 +46,7 @@ resource "aws_instance" "this_t2" {
 
   ami                    = "${var.ami}"
   instance_type          = "${var.instance_type}"
-  user_data              = "${var.user_data}"
+  user_data              = "${element(distinct(compact(concat(list(var.user_data), var.user_datas))),count.index)}"
   subnet_id              = "${element(distinct(compact(concat(list(var.subnet_id), var.subnet_ids))),count.index)}"
   key_name               = "${var.key_name}"
   monitoring             = "${var.monitoring}"
