@@ -125,7 +125,8 @@ variable "user_data" {
 
 variable "user_datas" {
   description = "The user data to provide when launching the instance, with support for multiple instances"
-  default     = ""
+  type        = "list"
+  default     = []
 }
 
 variable "iam_instance_profile" {
