@@ -1,5 +1,10 @@
+variable "autoreboot_enabled" {
+  description = "Whether or not EC2 autoreboot is enabled for this/every instance when the OS fails status checks."
+  default     = "true"
+}
+
 variable "autorecovery_enabled" {
-  description = "Whether or not EC2 autorecovery is enabled for this/every instance"
+  description = "Whether or not EC2 autorecovery is enabled for this/every instance when the AWS hardware fails status checks."
   default     = "true"
 }
 
