@@ -100,7 +100,8 @@ data "aws_ami" "ubuntu-xenial" {
 |------|-------------|:----:|:-----:|:-----:|
 | ami | ID of AMI to use for the instance | string | n/a | yes |
 | associate\_public\_ip\_address | If true, the EC2 instance will have associated public IP address | string | `"false"` | no |
-| autorecovery\_enabled | Whether or not EC2 autorecovery is enabled for this/every instance | string | `"true"` | no |
+| autoreboot\_enabled | Whether or not EC2 autoreboot is enabled for this/every instance when the OS fails status checks. | string | `"true"` | no |
+| autorecovery\_enabled | Whether or not EC2 autorecovery is enabled for this/every instance when the AWS hardware fails status checks. | string | `"true"` | no |
 | cpu\_credits | The credit option for CPU usage (unlimited or standard) | string | `"standard"` | no |
 | disable\_api\_termination | If true, enables EC2 Instance Termination Protection | string | `"false"` | no |
 | dns\_suffix | An optional DNS suffix for this/every instance - must work in the zone and be present if using DNS registration | string | `""` | no |
@@ -132,7 +133,7 @@ data "aws_ami" "ubuntu-xenial" {
 | tenancy | The tenancy of the instance (if the instance is running in a VPC). Available values: default, dedicated, host. | string | `"default"` | no |
 | use\_num\_suffix | Always append numerical suffix to instance name, even if instance_count is 1 | string | `"false"` | no |
 | user\_data | The user data to provide when launching the instance | string | `""` | no |
-| user\_datas | The user data to provide when launching the instance, with support for multiple instances | string | `""` | no |
+| user\_datas | The user data to provide when launching the instance, with support for multiple instances | list | `<list>` | no |
 | volume\_tags | A mapping of tags to assign to the devices created by the instance at launch time | map | `<map>` | no |
 | vpc\_security\_group\_ids | A list of security group IDs to associate with | list | n/a | yes |
 
