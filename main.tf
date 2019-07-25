@@ -46,7 +46,7 @@ resource "aws_instance" "this_t2" {
 
   ami                    = "${var.ami}"
   instance_type          = "${var.instance_type}"
-  user_data              = "${element(distinct(compact(concat(list(var.user_data), var.user_datas))),count.index)}"
+  user_data              = "${element(distinct(compact(concat(list(var.user_data), var.user_datas))), count.index)}"
   subnet_id              = "${element(local.subnet_ids, count.index)}"
   key_name               = "${var.key_name}"
   monitoring             = "${var.monitoring}"
