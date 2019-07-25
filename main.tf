@@ -54,7 +54,7 @@ resource "aws_instance" "this_t2" {
   iam_instance_profile   = "${var.iam_instance_profile}"
 
   associate_public_ip_address = "${var.associate_public_ip_address}"
-  private_ip                  = "${element(distinct(compact(concat(list(var.private_ip), var.private_ips))),count.index)}"
+  private_ip                  = "${element(distinct(compact(concat(list(var.private_ip), var.private_ips))), count.index)}"
   ipv6_address_count          = "${var.ipv6_address_count}"
   ipv6_addresses              = "${var.ipv6_addresses}"
 
