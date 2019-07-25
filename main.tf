@@ -2,7 +2,7 @@
 # Note: network_interface can't be specified together with associate_public_ip_address
 ######
 resource "aws_instance" "this" {
-  count = "${var.instance_count * (1 - local.is_t_instance_type)}"
+  count = "${local.instance_count}"
 
   ami                    = "${var.ami}"
   instance_type          = "${var.instance_type}"
@@ -42,7 +42,7 @@ resource "aws_instance" "this" {
 }
 
 resource "aws_instance" "this_t2" {
-  count = "${var.instance_count * local.is_t_instance_type}"
+  count = "${local.instance_count_t}"
 
   ami                    = "${var.ami}"
   instance_type          = "${var.instance_type}"
