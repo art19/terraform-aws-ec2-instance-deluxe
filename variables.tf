@@ -1,3 +1,33 @@
+variable "autoreboot_enabled" {
+  description = "Whether or not EC2 autoreboot is enabled for this/every instance when the OS fails status checks."
+  default     = "true"
+}
+
+variable "autorecovery_enabled" {
+  description = "Whether or not EC2 autorecovery is enabled for this/every instance when the AWS hardware fails status checks."
+  default     = "true"
+}
+
+variable "dns_name" {
+  description = "The DNS name to use for the node/nodes. Defaults to 'node' to make names like 'node0001' and 'node'."
+  default     = "node"
+}
+
+variable "dns_suffix" {
+  description = "An optional DNS suffix for this/every instance - must work in the zone and be present if using DNS registration"
+  default     = ""
+}
+
+variable "dns_ttl" {
+  description = "The TTL of the DNS record created"
+  default     = 60
+}
+
+variable "dns_zone_id" {
+  description = "An optional Route 53 zone ID to register the instance(s) in. If blank, this feature is disabled."
+  default     = ""
+}
+
 variable "name" {
   description = "Name to be used on all resources as prefix"
 }
@@ -14,6 +44,17 @@ variable "ami" {
 variable "placement_group" {
   description = "The Placement Group to start the instance in"
   default     = ""
+}
+
+variable "placement_partition_number" {
+  description = "If using a partition placement group, the placement partition number"
+  default     = ""
+}
+
+variable "placement_partition_numbers" {
+  description = "If using a partition placement group, the placement partition numbers (if more than one instance)"
+  type        = "list"
+  default     = []
 }
 
 variable "tenancy" {
@@ -76,6 +117,12 @@ variable "private_ip" {
   default     = ""
 }
 
+variable "private_ips" {
+  description = "Private IP addresses to associate with a group of instances in a VPC"
+  default     = []
+  type        = "list"
+}
+
 variable "source_dest_check" {
   description = "Controls if traffic is routed to the instance when the destination address does not match the instance. Used for NAT or VPNs."
   default     = true
@@ -84,6 +131,12 @@ variable "source_dest_check" {
 variable "user_data" {
   description = "The user data to provide when launching the instance"
   default     = ""
+}
+
+variable "user_datas" {
+  description = "The user data to provide when launching the instance, with support for multiple instances"
+  type        = "list"
+  default     = []
 }
 
 variable "iam_instance_profile" {

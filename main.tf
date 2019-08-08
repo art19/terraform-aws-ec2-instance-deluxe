@@ -1,24 +1,20 @@
-locals {
-  is_t_instance_type = "${replace(var.instance_type, "/^t[23]{1}\\..*$/", "1") == "1" ? "1" : "0"}"
-}
-
 ######
 # Note: network_interface can't be specified together with associate_public_ip_address
 ######
 resource "aws_instance" "this" {
-  count = "${var.instance_count * (1 - local.is_t_instance_type)}"
+  count = "${local.instance_count}"
 
   ami                    = "${var.ami}"
   instance_type          = "${var.instance_type}"
-  user_data              = "${var.user_data}"
-  subnet_id              = "${element(distinct(compact(concat(list(var.subnet_id), var.subnet_ids))),count.index)}"
+  user_data              = "${element(distinct(compact(concat(list(var.user_data), var.user_datas))),count.index)}"
+  subnet_id              = "${element(local.subnet_ids, count.index)}"
   key_name               = "${var.key_name}"
   monitoring             = "${var.monitoring}"
   vpc_security_group_ids = ["${var.vpc_security_group_ids}"]
   iam_instance_profile   = "${var.iam_instance_profile}"
 
   associate_public_ip_address = "${var.associate_public_ip_address}"
-  private_ip                  = "${var.private_ip}"
+  private_ip                  = "${element(distinct(compact(concat(list(var.private_ip), var.private_ips))), count.index)}"
   ipv6_address_count          = "${var.ipv6_address_count}"
   ipv6_addresses              = "${var.ipv6_addresses}"
 
@@ -31,10 +27,11 @@ resource "aws_instance" "this" {
   disable_api_termination              = "${var.disable_api_termination}"
   instance_initiated_shutdown_behavior = "${var.instance_initiated_shutdown_behavior}"
   placement_group                      = "${var.placement_group}"
+  placement_partition_number           = "${length(local.partition_numbers) == 0 ? "" : element(local.partition_numbers, count.index)}"
   tenancy                              = "${var.tenancy}"
 
-  tags        = "${merge(map("Name", (var.instance_count > 1) || (var.use_num_suffix == "true") ? format("%s-%d", var.name, count.index+1) : var.name), var.tags)}"
-  volume_tags = "${merge(map("Name", (var.instance_count > 1) || (var.use_num_suffix == "true") ? format("%s-%d", var.name, count.index+1) : var.name), var.volume_tags)}"
+  tags        = "${merge(map("Name", (var.instance_count > 1) || (var.use_num_suffix == "true") ? format("%s%04d%s", var.dns_name, count.index+1, local.dns_suffix) : format("%s%s", var.dns_name, local.dns_suffix)), var.tags)}"
+  volume_tags = "${merge(map("Name", (var.instance_count > 1) || (var.use_num_suffix == "true") ? format("%s%04d%s", var.dns_name, count.index+1, local.dns_suffix) : format("%s%s", var.dns_name, local.dns_suffix)), var.volume_tags)}"
 
   lifecycle {
     # Due to several known issues in Terraform AWS provider related to arguments of aws_instance:
@@ -45,19 +42,19 @@ resource "aws_instance" "this" {
 }
 
 resource "aws_instance" "this_t2" {
-  count = "${var.instance_count * local.is_t_instance_type}"
+  count = "${local.instance_count_t}"
 
   ami                    = "${var.ami}"
   instance_type          = "${var.instance_type}"
-  user_data              = "${var.user_data}"
-  subnet_id              = "${element(distinct(compact(concat(list(var.subnet_id), var.subnet_ids))),count.index)}"
+  user_data              = "${element(distinct(compact(concat(list(var.user_data), var.user_datas))), count.index)}"
+  subnet_id              = "${element(local.subnet_ids, count.index)}"
   key_name               = "${var.key_name}"
   monitoring             = "${var.monitoring}"
   vpc_security_group_ids = ["${var.vpc_security_group_ids}"]
   iam_instance_profile   = "${var.iam_instance_profile}"
 
   associate_public_ip_address = "${var.associate_public_ip_address}"
-  private_ip                  = "${var.private_ip}"
+  private_ip                  = "${element(distinct(compact(concat(list(var.private_ip), var.private_ips))), count.index)}"
   ipv6_address_count          = "${var.ipv6_address_count}"
   ipv6_addresses              = "${var.ipv6_addresses}"
 
@@ -70,14 +67,15 @@ resource "aws_instance" "this_t2" {
   disable_api_termination              = "${var.disable_api_termination}"
   instance_initiated_shutdown_behavior = "${var.instance_initiated_shutdown_behavior}"
   placement_group                      = "${var.placement_group}"
+  placement_partition_number           = "${length(local.partition_numbers) == 0 ? "" : element(local.partition_numbers, count.index)}"
   tenancy                              = "${var.tenancy}"
 
   credit_specification {
     cpu_credits = "${var.cpu_credits}"
   }
 
-  tags        = "${merge(map("Name", (var.instance_count > 1) || (var.use_num_suffix == "true") ? format("%s-%d", var.name, count.index+1) : var.name), var.tags)}"
-  volume_tags = "${merge(map("Name", (var.instance_count > 1) || (var.use_num_suffix == "true") ? format("%s-%d", var.name, count.index+1) : var.name), var.volume_tags)}"
+  tags        = "${merge(map("Name", (var.instance_count > 1) || (var.use_num_suffix == "true") ? format("%s%04d%s", var.dns_name, count.index+1, local.dns_suffix) : format("%s%s", var.dns_name, local.dns_suffix)), var.tags)}"
+  volume_tags = "${merge(map("Name", (var.instance_count > 1) || (var.use_num_suffix == "true") ? format("%s%04d%s", var.dns_name, count.index+1, local.dns_suffix) : format("%s%s", var.dns_name, local.dns_suffix)), var.volume_tags)}"
 
   lifecycle {
     # Due to several known issues in Terraform AWS provider related to arguments of aws_instance:

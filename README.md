@@ -1,16 +1,16 @@
-# AWS EC2 Instance Terraform module
+# *Deluxe* AWS EC2 Instance Terraform module
 
-Terraform module which creates EC2 instance(s) on AWS.
+Terraform module which creates EC2 instance(s) on AWS. Instances may optionally have autorecovery turned on (the default) and/or register in a Route 53 zone.
 
 These types of resources are supported:
 
 * [EC2 instance](https://www.terraform.io/docs/providers/aws/r/instance.html)
+* [CloudWatch Alarm](https://www.terraform.io/docs/providers/aws/r/cloudwatch_metric_alarm.html)
+* [Route 53 Record](https://www.terraform.io/docs/providers/aws/r/route53_record.html)
 
 ## Terraform versions
 
-Terraform 0.12. Pin module version to `~> v2.0`. Submit pull-requests to `master` branch.
-
-Terraform 0.11. Pin module version to `~> v1.0`. Submit pull-requests to `terraform011` branch.
+Terraform 0.11
 
 ## Usage
 
@@ -91,6 +91,7 @@ data "aws_ami" "ubuntu-xenial" {
   not configurable using this module at the moment
 * Changes in `ebs_block_device` argument will be ignored. Use [aws_volume_attachment](https://www.terraform.io/docs/providers/aws/r/volume_attachment.html) resource to attach and detach volumes from AWS EC2 instances. See [this example](https://github.com/terraform-aws-modules/terraform-aws-ec2-instance/tree/master/examples/volume-attachment).
 * One of `subnet_id` or `subnet_ids` is required. If both are provided, the value of `subnet_id` is prepended to the value of `subnet_ids`.
+* `placement_partition_number` support is required; this needs a version of Terraform with [this Pull Request](https://github.com/terraform-providers/terraform-provider-aws/pull/7777) merged.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
@@ -99,8 +100,13 @@ data "aws_ami" "ubuntu-xenial" {
 |------|-------------|:----:|:-----:|:-----:|
 | ami | ID of AMI to use for the instance | string | n/a | yes |
 | associate\_public\_ip\_address | If true, the EC2 instance will have associated public IP address | string | `"false"` | no |
+| autoreboot\_enabled | Whether or not EC2 autoreboot is enabled for this/every instance when the OS fails status checks. | string | `"true"` | no |
+| autorecovery\_enabled | Whether or not EC2 autorecovery is enabled for this/every instance when the AWS hardware fails status checks. | string | `"true"` | no |
 | cpu\_credits | The credit option for CPU usage (unlimited or standard) | string | `"standard"` | no |
 | disable\_api\_termination | If true, enables EC2 Instance Termination Protection | string | `"false"` | no |
+| dns\_suffix | An optional DNS suffix for this/every instance - must work in the zone and be present if using DNS registration | string | `""` | no |
+| dns\_ttl | The TTL of the DNS record created | string | `"60"` | no |
+| dns\_zone\_id | An optional Route 53 zone ID to register the instance(s) in. If blank, this feature is disabled. | string | `""` | no |
 | ebs\_block\_device | Additional EBS block devices to attach to the instance | list | `<list>` | no |
 | ebs\_optimized | If true, the launched EC2 instance will be EBS-optimized | string | `"false"` | no |
 | ephemeral\_block\_device | Customize Ephemeral (also known as Instance Store) volumes on the instance | list | `<list>` | no |
@@ -115,7 +121,10 @@ data "aws_ami" "ubuntu-xenial" {
 | name | Name to be used on all resources as prefix | string | n/a | yes |
 | network\_interface | Customize network interfaces to be attached at instance boot time | list | `<list>` | no |
 | placement\_group | The Placement Group to start the instance in | string | `""` | no |
+| placement\_partition\_number | If using a partition placement group, the placement partition number | string | `""` | no |
+| placement\_partition\_numbers | If using a partition placement group, the placement partition numbers (if more than one instance) | list | `<list>` | no |
 | private\_ip | Private IP address to associate with the instance in a VPC | string | `""` | no |
+| private\_ips | Private IP addresses to associate with a group of instances in a VPC | list | `<list>` | no |
 | root\_block\_device | Customize details about the root block device of the instance. See Block Devices below for details | list | `<list>` | no |
 | source\_dest\_check | Controls if traffic is routed to the instance when the destination address does not match the instance. Used for NAT or VPNs. | string | `"true"` | no |
 | subnet\_id | The VPC Subnet ID to launch in | string | `""` | no |
@@ -124,6 +133,7 @@ data "aws_ami" "ubuntu-xenial" {
 | tenancy | The tenancy of the instance (if the instance is running in a VPC). Available values: default, dedicated, host. | string | `"default"` | no |
 | use\_num\_suffix | Always append numerical suffix to instance name, even if instance_count is 1 | string | `"false"` | no |
 | user\_data | The user data to provide when launching the instance | string | `""` | no |
+| user\_datas | The user data to provide when launching the instance, with support for multiple instances | list | `<list>` | no |
 | volume\_tags | A mapping of tags to assign to the devices created by the instance at launch time | map | `<map>` | no |
 | vpc\_security\_group\_ids | A list of security group IDs to associate with | list | n/a | yes |
 
