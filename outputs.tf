@@ -1,5 +1,7 @@
 locals {
   this_id                           = "${compact(concat(coalescelist(aws_instance.this.*.id, aws_instance.this_t2.*.id), list("")))}"
+  this_alarm_instance_failed_name   = "${compact(concat(coalescelist(aws_cloudwatch_metric_alarm.this_instance_failed.*.alarm_name, aws_cloudwatch_metric_alarm.this_t2_instance_failed.*.alarm_name), list("")))}"
+  this_alarm_system_failed_name     = "${compact(concat(coalescelist(aws_cloudwatch_metric_alarm.this_system_failed.*.alarm_name, aws_cloudwatch_metric_alarm.this_t2_system_failed.*.alarm_name), list("")))}"
   this_availability_zone            = "${compact(concat(coalescelist(aws_instance.this.*.availability_zone, aws_instance.this_t2.*.availability_zone), list("")))}"
   this_key_name                     = "${compact(concat(coalescelist(aws_instance.this.*.key_name, aws_instance.this_t2.*.key_name), list("")))}"
   this_public_dns                   = "${compact(concat(coalescelist(aws_instance.this.*.public_dns, aws_instance.this_t2.*.public_dns), list("")))}"
@@ -8,6 +10,7 @@ locals {
   this_private_dns                  = "${compact(concat(coalescelist(aws_instance.this.*.private_dns, aws_instance.this_t2.*.private_dns), list("")))}"
   this_private_ip                   = "${compact(concat(coalescelist(aws_instance.this.*.private_ip, aws_instance.this_t2.*.private_ip), list("")))}"
   this_placement_group              = "${compact(concat(coalescelist(aws_instance.this.*.placement_group, aws_instance.this_t2.*.placement_group), list("")))}"
+  this_registered_fqdn              = "${compact(concat(coalescelist(aws_route53_record.this.*.name, aws_route53_record.this_t2.*.name), list("")))}"
   this_security_groups              = "${compact(concat(coalescelist(flatten(aws_instance.this.*.security_groups), flatten(aws_instance.this_t2.*.security_groups)), list("")))}"
   this_vpc_security_group_ids       = "${compact(concat(coalescelist(flatten(aws_instance.this.*.vpc_security_group_ids), flatten(aws_instance.this_t2.*.vpc_security_group_ids)), list("")))}"
   this_subnet_id                    = "${compact(concat(coalescelist(aws_instance.this.*.subnet_id, aws_instance.this_t2.*.subnet_id), list("")))}"
@@ -19,6 +22,16 @@ locals {
 output "id" {
   description = "List of IDs of instances"
   value       = ["${local.this_id}"]
+}
+
+output "alarm_instance_failed_name" {
+  description = "List of instance failed alarm names"
+  value       = ["${local.this_alarm_instance_failed_name}"]
+}
+
+output "alarm_system_failed_name" {
+  description = "List of system failed alarm names"
+  value       = ["${local.this_alarm_system_failed_name}"]
 }
 
 output "availability_zone" {
@@ -59,6 +72,11 @@ output "private_dns" {
 output "private_ip" {
   description = "List of private IP addresses assigned to the instances"
   value       = ["${local.this_private_ip}"]
+}
+
+output "registered_fqdn" {
+  description = "List of FQDNs assigned to the instances"
+  value       = ["${local.this_registered_fqdn}"]
 }
 
 output "security_groups" {
