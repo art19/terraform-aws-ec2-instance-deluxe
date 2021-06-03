@@ -8,6 +8,11 @@ variable "autorecovery_enabled" {
   default     = "true"
 }
 
+variable "dns_ip_type" {
+  description = "Which type of IP to include in the DNS record, either public or private"
+  default     = "private"
+}
+
 variable "dns_name" {
   description = "The DNS name to use for the node/nodes. Defaults to 'node' to make names like 'node0001' and 'node'."
   default     = "node"
