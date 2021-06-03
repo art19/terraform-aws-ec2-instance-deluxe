@@ -7,7 +7,7 @@ locals {
   instance_count_t = "${var.instance_count * local.is_t_instance_type}"
 
   # Returns 1 if this is a t instance type, 0 otherwise
-  is_t_instance_type = "${replace(var.instance_type, "/^t[23]{1}[a]?\\..*$/", "1") == "1" ? "1" : "0"}"
+  is_t_instance_type = "${replace(var.instance_type, "/^t[234]{1}[ag]?\\..*$/", "1") == "1" ? "1" : "0"}"
 
   # Get the list of partition numbers
   partition_numbers = "${distinct(compact(concat(list(var.placement_partition_number), var.placement_partition_numbers)))}"
