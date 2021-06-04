@@ -3,6 +3,16 @@ output "id" {
   value       = aws_instance.this.*.id
 }
 
+output "alarm_instance_failed_name" {
+  description = "List of instance failed alarm names"
+  value       = aws_cloudwatch_metric_alarm.this_instance_failed.*.alarm_name
+}
+
+output "alarm_system_failed_name" {
+  description = "List of system failed alarm names"
+  value       = aws_cloudwatch_metric_alarm.this_system_failed.*.alarm_name
+}
+
 output "arn" {
   description = "List of ARNs of instances"
   value       = aws_instance.this.*.arn
@@ -56,6 +66,11 @@ output "private_dns" {
 output "private_ip" {
   description = "List of private IP addresses assigned to the instances"
   value       = aws_instance.this.*.private_ip
+}
+
+output "registered_fqdn" {
+  description = "List of FQDNs assigned to the instances"
+  value       = aws_route53_record.this.*.name
 }
 
 output "security_groups" {

@@ -1,3 +1,38 @@
+variable "autoreboot_enabled" {
+  description = "Whether or not EC2 autoreboot is enabled for this/every instance when the OS fails status checks."
+  default     = "true"
+}
+
+variable "autorecovery_enabled" {
+  description = "Whether or not EC2 autorecovery is enabled for this/every instance when the AWS hardware fails status checks."
+  default     = "true"
+}
+
+variable "dns_ip_type" {
+  description = "Which type of IP to include in the DNS record, either public or private"
+  default     = "private"
+}
+
+variable "dns_name" {
+  description = "The DNS name to use for the node/nodes. Defaults to 'node' to make names like 'node0001' and 'node'."
+  default     = "node"
+}
+
+variable "dns_suffix" {
+  description = "An optional DNS suffix for this/every instance - must work in the zone and be present if using DNS registration"
+  default     = ""
+}
+
+variable "dns_ttl" {
+  description = "The TTL of the DNS record created"
+  default     = 60
+}
+
+variable "dns_zone_id" {
+  description = "An optional Route 53 zone ID to register the instance(s) in. If blank, this feature is disabled."
+  default     = ""
+}
+
 variable "name" {
   description = "Name to be used on all resources as prefix"
   type        = string
@@ -73,6 +108,17 @@ variable "vpc_security_group_ids" {
   default     = null
 }
 
+variable "placement_partition_number" {
+  description = "If using a partition placement group, the placement partition number"
+  default     = null
+}
+
+variable "placement_partition_numbers" {
+  description = "If using a partition placement group, the placement partition numbers (if more than one instance)"
+  type        = list(string)
+  default     = []
+}
+
 variable "subnet_id" {
   description = "The VPC Subnet ID to launch in"
   type        = string
@@ -115,10 +161,22 @@ variable "user_data" {
   default     = null
 }
 
+variable "user_datas" {
+  description = "The user data to provide when launching the instance, with support for multiple instances"
+  type        = list(string)
+  default     = []
+}
+
 variable "user_data_base64" {
   description = "Can be used instead of user_data to pass base64-encoded binary data directly. Use this instead of user_data whenever the value is not a valid UTF-8 string. For example, gzip-encoded user data must be base64-encoded and passed via this argument to avoid corruption."
   type        = string
   default     = null
+}
+
+variable "user_datas_base64" {
+  description = "Can be used instead of user_data to pass base64-encoded binary data directly. Use this instead of user_data whenever the value is not a valid UTF-8 string. For example, gzip-encoded user data must be base64-encoded and passed via this argument to avoid corruption."
+  type        = list(string)
+  default     = []
 }
 
 variable "iam_instance_profile" {
@@ -190,7 +248,7 @@ variable "use_num_suffix" {
 variable "num_suffix_format" {
   description = "Numerical suffix format used as the volume and EC2 instance name suffix"
   type        = string
-  default     = "-%d"
+  default     = "%04d"
 }
 
 

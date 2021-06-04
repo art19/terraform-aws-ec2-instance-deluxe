@@ -1,18 +1,36 @@
 locals {
   is_t_instance_type = replace(var.instance_type, "/^t(2|3|3a){1}\\..*$/", "1") == "1" ? true : false
+
+  partition_numbers = compact(concat([var.placement_partition_number], var.placement_partition_numbers))
 }
 
 resource "aws_instance" "this" {
   count = var.instance_count
 
-  ami              = var.ami
-  instance_type    = var.instance_type
-  user_data        = var.user_data
-  user_data_base64 = var.user_data_base64
+  ami           = var.ami
+  instance_type = var.instance_type
+
+  user_data = element(
+    concat(
+      compact(concat([var.user_data], var.user_datas)),
+      [null]
+    ),
+    count.index
+  )
+
+  user_data_base64 = element(
+    concat(
+      compact(concat([var.user_data_base64], var.user_datas_base64)),
+      [null]
+    ),
+    count.index
+  )
+
   subnet_id = length(var.network_interface) > 0 ? null : element(
     distinct(compact(concat([var.subnet_id], var.subnet_ids))),
-    count.index,
+    count.index
   )
+
   key_name               = var.key_name
   monitoring             = var.monitoring
   get_password_data      = var.get_password_data
@@ -74,6 +92,7 @@ resource "aws_instance" "this" {
   disable_api_termination              = var.disable_api_termination
   instance_initiated_shutdown_behavior = var.instance_initiated_shutdown_behavior
   placement_group                      = var.placement_group
+  placement_partition_number           = length(local.partition_numbers) == 0 ? null : element(local.partition_numbers, count.index)
   tenancy                              = var.tenancy
 
   tags = merge(
