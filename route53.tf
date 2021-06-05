@@ -7,7 +7,7 @@ resource "aws_route53_record" "this" {
   count = var.instance_count
 
   zone_id = var.dns_zone_id
-  name    = "${var.instance_count > 1 || var.use_num_suffix ? format("%s${var.num_suffix_format}", var.name, count.index + 1) : var.name}${local.dns_suffix}." # trailing dot intentional
+  name    = "${var.instance_count > 1 || var.use_num_suffix ? format("%s${var.num_suffix_format}", var.dns_name, count.index + 1) : var.dns_name}${local.dns_suffix}." # trailing dot intentional
   type    = "A"
   ttl     = var.dns_ttl
   records = [
