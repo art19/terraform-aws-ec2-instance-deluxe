@@ -70,7 +70,7 @@ output "private_ip" {
 
 output "registered_fqdn" {
   description = "List of FQDNs assigned to the instances"
-  value       = aws_route53_record.this.*.name
+  value       = aws_route53_record.this.*.fqdn
 }
 
 output "security_groups" {
