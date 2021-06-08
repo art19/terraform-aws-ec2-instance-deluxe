@@ -1,0 +1,25 @@
+{
+  "Parameters": {
+    "LaunchTemplateId": { "Type": "String" },
+    "LaunchTemplateVersion": { "Type": "String" }
+  },
+  "Resources": {
+    "EC2Instance": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "LaunchTemplate": {
+          "LaunchTemplateId": { "Ref": "LaunchTemplateId" },
+          "Version": { "Ref": "Version" }
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "EC2InstanceId": { "Value": { "Ref": "EC2Instance" }},
+    "EC2InstanceAvailabilityZone": { "Value": { "Fn::GetAtt": ["EC2Instance", "AvailabilityZone"] }},
+    "EC2InstancePrivateDnsName": { "Value": { "Fn::GetAtt": ["EC2Instance", "PrivateDnsName"] }},
+    "EC2InstancePrivateIp": { "Value": { "Fn::GetAtt": ["EC2Instance", "PrivateIp"] }},
+    "EC2InstancePublicDnsName": { "Value": { "Fn::GetAtt": ["EC2Instance", "PublicDnsName"] }},
+    "EC2InstancePublicIp": { "Value": { "Fn::GetAtt": ["EC2Instance", "PublicIp"] }}
+  }
+}

@@ -15,7 +15,7 @@ resource "aws_cloudwatch_metric_alarm" "this_instance_failed" {
   threshold           = 0
 
   dimensions = {
-    InstanceId = element(coalescelist(data.aws_instance.this.*.id, [""]), count.index)
+    InstanceId = element(coalescelist(aws_cloudformation_stack.this.*.outputs, [{ EC2InstanceId = "" }]), count.index)["EC2InstanceId"]
   }
 }
 
@@ -36,6 +36,6 @@ resource "aws_cloudwatch_metric_alarm" "this_system_failed" {
   threshold           = 0
 
   dimensions = {
-    InstanceId = element(coalescelist(data.aws_instance.this.*.id, [""]), count.index)
+    InstanceId = element(coalescelist(aws_cloudformation_stack.this.*.outputs, [{ EC2InstanceId = "" }]), count.index)["EC2InstanceId"]
   }
 }

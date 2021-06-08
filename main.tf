@@ -4,6 +4,16 @@ locals {
   partition_numbers = compact(concat([var.placement_partition_number], var.placement_partition_numbers))
 }
 
+# We create a launch template and CloudFormation stack for each instance to work around the fact that we
+# want to support partition placement group partition numbers and Terraform does not support (currently)
+# either specifying placement partition numbers or launch templates on EC2 instances.
+#
+# https://github.com/hashicorp/terraform-provider-aws/issues/4264
+# https://github.com/hashicorp/terraform-provider-aws/issues/7754
+# https://github.com/hashicorp/terraform-provider-aws/pull/10807
+# https://github.com/hashicorp/terraform-provider-aws/pull/15360
+# https://github.com/hashicorp/terraform-provider-aws/pull/7649
+# https://github.com/hashicorp/terraform-provider-aws/pull/7777
 resource "aws_launch_template" "this" {
   count = var.instance_count
 
@@ -133,12 +143,18 @@ resource "aws_launch_template" "this" {
   }
 }
 
-data "aws_instance" "this" {
-  count = var.skip_launch ? 0 : var.instance_count
+resource "aws_cloudformation_stack" "this" {
+  count = var.instance_count
 
-  get_password_data = true
+  name          = aws_launch_template.this[count.index].name
+  template_body = file("${path.module}/instance.cform")
 
-  instance_tags = {
-    "aws:autoscaling:groupName" = aws_autoscaling_group.this[count.index].name
+  parameters = {
+    LaunchTemplateId      = aws_launch_template.this[count.index].id
+    LaunchTemplateVersion = aws_launch_template.this[count.index].latest_version
+  }
+
+  tags = {
+    Name = aws_launch_template.this[count.index].name
   }
 }
