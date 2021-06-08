@@ -27,10 +27,10 @@ resource "aws_autoscaling_group" "this" {
   suspended_processes = var.skip_launch ? ["Launch", "ReplaceUnhealthy", "Terminate"] : ["ReplaceUnhealthy", "Terminate"]
 
   # This exists in one subnet
-  vpc_zone_identifier = element(
+  vpc_zone_identifier = [element(
     distinct(compact(concat([var.subnet_id], var.subnet_ids))),
     count.index
-  )
+  )]
 
   launch_template {
     id      = aws_launch_template.this[count.index].id
