@@ -113,12 +113,6 @@ variable "placement_partition_numbers" {
   default     = []
 }
 
-variable "skip_launch" {
-  type        = bool
-  description = "Whether to skip launching instance(s), in the case you need to migrate already running ones"
-  default     = false
-}
-
 variable "subnet_id" {
   description = "The VPC Subnet ID to launch in"
   type        = string
