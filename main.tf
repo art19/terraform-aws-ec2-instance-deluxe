@@ -154,7 +154,10 @@ resource "aws_cloudformation_stack" "this" {
     LaunchTemplateVersion = aws_launch_template.this[count.index].latest_version
   }
 
-  tags = {
-    Name = aws_launch_template.this[count.index].name
-  }
+  tags = merge(
+    {
+      "Name" = "${var.instance_count > 1 || var.use_num_suffix ? format("%s${var.num_suffix_format}", var.dns_name, count.index + 1) : var.dns_name}${local.dns_suffix}"
+    },
+    var.tags
+  )
 }

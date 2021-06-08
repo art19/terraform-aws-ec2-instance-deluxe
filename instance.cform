@@ -6,6 +6,7 @@
   "Resources": {
     "EC2Instance": {
       "Type": "AWS::EC2::Instance",
+      "DeletionPolicy": "Delete",
       "Properties": {
         "LaunchTemplate": {
           "LaunchTemplateId": { "Ref": "LaunchTemplateId" },
