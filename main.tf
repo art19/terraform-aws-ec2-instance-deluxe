@@ -150,6 +150,7 @@ resource "aws_cloudformation_stack" "this" {
   template_body = file("${path.module}/instance.cform")
 
   parameters = {
+    HasPublicIp           = var.associate_public_ip_address ? 1 : 0
     LaunchTemplateId      = aws_launch_template.this[count.index].id
     LaunchTemplateVersion = aws_launch_template.this[count.index].latest_version
   }

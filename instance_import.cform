@@ -1,7 +1,11 @@
 {
   "Parameters": {
+    "HasPublicIp": { "Default": "1", "Type": "Number" },
     "LaunchTemplateId": { "Type": "String" },
     "LaunchTemplateVersion": { "Type": "String" }
+  },
+  "Conditions": {
+    "HasPublicIp": { "Fn::Equals": [{ "Ref": "HasPublicIp" }, "1"] }
   },
   "Resources": {
     "EC2Instance": {

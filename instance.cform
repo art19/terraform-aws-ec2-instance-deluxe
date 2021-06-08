@@ -1,7 +1,11 @@
 {
   "Parameters": {
+    "HasPublicIp": { "Default": "1", "Type": "Number" },
     "LaunchTemplateId": { "Type": "String" },
     "LaunchTemplateVersion": { "Type": "String" }
+  },
+  "Conditions": {
+    "HasPublicIp": { "Fn::Equals": [{ "Ref": "HasPublicIp" }, "1"] }
   },
   "Resources": {
     "EC2Instance": {
@@ -20,7 +24,7 @@
     "EC2InstanceAvailabilityZone": { "Value": { "Fn::GetAtt": ["EC2Instance", "AvailabilityZone"] }},
     "EC2InstancePrivateDnsName": { "Value": { "Fn::GetAtt": ["EC2Instance", "PrivateDnsName"] }},
     "EC2InstancePrivateIp": { "Value": { "Fn::GetAtt": ["EC2Instance", "PrivateIp"] }},
-    "EC2InstancePublicDnsName": { "Value": { "Fn::GetAtt": ["EC2Instance", "PublicDnsName"] }},
-    "EC2InstancePublicIp": { "Value": { "Fn::GetAtt": ["EC2Instance", "PublicIp"] }}
+    "EC2InstancePublicDnsName": { "Value": { "Fn::If": ["HasPublicIp", { "Fn::GetAtt": ["EC2Instance", "PublicDnsName"] }, ""] } },
+    "EC2InstancePublicIp": { "Value": { "Fn::If": ["HasPublicIp", { "Fn::GetAtt": ["EC2Instance", "PublicIp"] }, ""] } }
   }
 }
