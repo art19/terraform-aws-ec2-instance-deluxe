@@ -11,6 +11,6 @@ resource "aws_route53_record" "this" {
   type    = "A"
   ttl     = var.dns_ttl
   records = [
-    var.dns_ip_type == "private" ? aws_instance.this.*.private_ip[count.index] : aws_instance.this.*.public_ip[count.index]
+    var.dns_ip_type == "private" ? element(coalescelist(data.aws_instance.this.*.private_ip, [""]), count.index) : element(coalescelist(data.aws_instance.this.*.public_ip, [""]), count.index)
   ]
 }

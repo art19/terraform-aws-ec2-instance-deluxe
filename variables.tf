@@ -55,12 +55,6 @@ variable "placement_group" {
   default     = ""
 }
 
-variable "get_password_data" {
-  description = "If true, wait for password data to become available and retrieve it."
-  type        = bool
-  default     = false
-}
-
 variable "tenancy" {
   description = "The tenancy of the instance (if the instance is running in a VPC). Available values: default, dedicated, host."
   type        = string
@@ -119,6 +113,12 @@ variable "placement_partition_numbers" {
   default     = []
 }
 
+variable "skip_launch" {
+  type        = bool
+  description = "Whether to skip launching instance(s), in the case you need to migrate already running ones"
+  default     = false
+}
+
 variable "subnet_id" {
   description = "The VPC Subnet ID to launch in"
   type        = string
@@ -149,32 +149,14 @@ variable "private_ips" {
   default     = []
 }
 
-variable "source_dest_check" {
-  description = "Controls if traffic is routed to the instance when the destination address does not match the instance. Used for NAT or VPNs."
-  type        = bool
-  default     = true
-}
-
-variable "user_data" {
-  description = "The user data to provide when launching the instance. Do not pass gzip-compressed data via this argument; see user_data_base64 instead."
-  type        = string
-  default     = null
-}
-
-variable "user_datas" {
-  description = "The user data to provide when launching the instance, with support for multiple instances"
-  type        = list(string)
-  default     = []
-}
-
 variable "user_data_base64" {
-  description = "Can be used instead of user_data to pass base64-encoded binary data directly. Use this instead of user_data whenever the value is not a valid UTF-8 string. For example, gzip-encoded user data must be base64-encoded and passed via this argument to avoid corruption."
+  description = "Use to pass base64-encoded user data."
   type        = string
   default     = null
 }
 
 variable "user_datas_base64" {
-  description = "Can be used instead of user_data to pass base64-encoded binary data directly. Use this instead of user_data whenever the value is not a valid UTF-8 string. For example, gzip-encoded user data must be base64-encoded and passed via this argument to avoid corruption."
+  description = "Use to pass base64-encoded user data for each distinct instance being launched."
   type        = list(string)
   default     = []
 }
@@ -223,12 +205,6 @@ variable "ebs_block_device" {
 
 variable "ephemeral_block_device" {
   description = "Customize Ephemeral (also known as Instance Store) volumes on the instance"
-  type        = list(map(string))
-  default     = []
-}
-
-variable "network_interface" {
-  description = "Customize network interfaces to be attached at instance boot time"
   type        = list(map(string))
   default     = []
 }
