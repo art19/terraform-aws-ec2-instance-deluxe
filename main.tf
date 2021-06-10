@@ -146,7 +146,10 @@ resource "aws_launch_template" "this" {
 resource "aws_cloudformation_stack" "this" {
   count = var.instance_count
 
-  name          = aws_launch_template.this[count.index].name
+  # The name has the launch template version in it to force Terraform to destroy the old stack before creating a new one.
+  # This is because CloudFormation has no way to terminate an instance before creating a new one, and if you're specifying something
+  # like a private IP, you can't replace instances using the same private IP.
+  name          = "${aws_launch_template.this[count.index].name}-v${aws_launch_template.this[count.index].latest_version}"
   template_body = file("${path.module}/instance.cform")
 
   parameters = {
