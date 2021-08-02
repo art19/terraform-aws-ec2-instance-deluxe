@@ -1,5 +1,5 @@
 locals {
-  is_t_instance_type = replace(var.instance_type, "/^t(2|3|3a){1}\\..*$/", "1") == "1" ? true : false
+  is_t_instance_type = replace(var.instance_type, "/^t(2|3|3a|4|4a|4g|4i){1}\\..*$/", "1") == "1" ? true : false
 
   partition_numbers = compact(concat([var.placement_partition_number], var.placement_partition_numbers))
 }
