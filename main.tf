@@ -80,6 +80,16 @@ resource "aws_launch_template" "this" {
     }
   }
 
+  dynamic "metadata_options" {
+    for_each = length(keys(var.metadata_options)) == 0 ? [] : [var.metadata_options]
+    
+    content {
+      http_endpoint               = lookup(metadata_options.value, "http_endpoint", "enabled")
+      http_tokens                 = lookup(metadata_options.value, "http_tokens", "optional")
+      http_put_response_hop_limit = lookup(metadata_options.value, "http_put_response_hop_limit", "2")
+    }
+  }
+
   credit_specification {
     cpu_credits = local.is_t_instance_type ? var.cpu_credits : null
   }
